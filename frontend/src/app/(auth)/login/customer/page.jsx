@@ -1,91 +1,116 @@
-"use client"
+"use client";
+import { useState } from 'react';
+import Link from 'next/link';
 
-import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
-
-const RegisterPage = () => {
+const CustomerLoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    rememberMe: false
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add your login logic here
+    console.log('Login submitted:', formData);
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white rounded border border-blue-200 p-8">
-        <h2 className="text-center text-2xl font-semibold text-gray-800 mb-8">
-          Sign In
-        </h2>
-        
-        <form className="space-y-4">
-          {/* Email Input */}
-          <div>
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full px-3 py-2 border border-gray-200 rounded focus:outline-none focus:border-gray-300"
-            />
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation breadcrumb */}
+      <div className="bg-gray-900 text-white p-4">
+        <div className="container mx-auto">
+          <div className="flex items-center space-x-2">
+            <Link href="/" className="text-green-500 hover:text-green-400">Home</Link>
+            <span>/</span>
+            <Link href="/account" className="text-green-500 hover:text-green-400">Account</Link>
+            <span>/</span>
+            <span>Login</span>
           </div>
+        </div>
+      </div>
 
-          {/* Password Input */}
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              className="w-full px-3 py-2 border border-gray-200 rounded focus:outline-none focus:border-gray-300"
-            />
+      {/* Login Form */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-sm">
+          <h1 className="text-2xl font-semibold text-center mb-8">Sign In</h1>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded border border-gray-300 focus:outline-none focus:border-green-500"
+                required
+              />
+            </div>
+            
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded border border-gray-300 focus:outline-none focus:border-green-500"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                Remember me
+              </label>
+              <Link href="/forgot-password" className="text-green-500 hover:text-green-600">
+                Forget Password
+              </Link>
+            </div>
+            
             <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-2.5 text-gray-400"
+              type="submit"
+              className="w-full bg-green-500 text-white py-3 rounded hover:bg-green-600 transition duration-200"
             >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              Login
             </button>
+          </form>
+          
+          <div className="text-center mt-6">
+            <p>Don't have account? 
+              <Link href="/register" className="text-green-500 hover:text-green-600 ml-1">
+                Register
+              </Link>
+            </p>
           </div>
-
-          {/* Confirm Password */}
-          <div className="relative">
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              placeholder="Confirm Password"
-              className="w-full px-3 py-2 border border-gray-200 rounded focus:outline-none focus:border-gray-300"
-            />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-2.5 text-gray-400"
-            >
-              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
-          </div>
-
-          {/* Terms & Conditions */}
-          {/* <div className="flex items-center">
-            <input
-              type="checkbox"
-              className="h-4 w-4 text-green-500 border-gray-300 rounded"
-            />
-            <label className="ml-2 block text-sm text-gray-600">
-              Accept all terms & Conditions
-            </label>
-          </div> */}
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-green-500 text-white py-2 px-4 rounded-full mt-6 hover:bg-green-600 transition-colors duration-200"
-          >
-            Sign In
-          </button>
-
-          {/* Login Link */}
-          <div className="text-center text-sm mt-4">
-            <span className="text-gray-600">New to the platform? </span>
-            <a href="/register" className="text-blue-500 hover:underline">
-              Register
-            </a>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
 
-export default RegisterPage;
+export default CustomerLoginPage;
