@@ -1,38 +1,35 @@
+
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema(
+const VendorSchema = new mongoose.Schema(
   {
-    firstName: {
+    shopName: {
       type: String,
       required: true,
       min: 2,
       max: 50,
     },
-    lastName: {
+    shopDescription: {
       type: String,
       required: true,
       min: 2,
       max: 50,
     },
-    email: {
+    shopAddress: {
       type: String,
       required: true,
+      min: 2,
       max: 50,
-      unique: true,
     },
-    password: {
-      type: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", 
       required: true,
-      min: 5,
     },
-    role:{
-      type: String,
-      enum: ["user", "vendor"],
-      default: "user",
-    }
   },
   { timestamps: true }
 );
 
-const User = mongoose.model("User", UserSchema);
-export default User;
+const Vendor = mongoose.model("Vendor", VendorSchema);
+
+export default Vendor;
